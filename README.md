@@ -37,3 +37,13 @@
 - **Database**: SQLite
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Безопасность**: CSRF-защита Django
+
+## 👨‍💻 Автор
+
+<div align="center">
+  <a href="https://github.com/Dorsen2307">
+    <img src="https://img.shields.io/badge/GitHub-Dorsen2307-181717?style=flat-square&logo=github&logoColor=white&labelColor=181717" height="30">
+  </a>
+  <br>
+  <sub>✨ С любовью к коду ✨</sub>
+</div>
