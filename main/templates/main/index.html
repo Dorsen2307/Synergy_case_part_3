@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приветственное приложение</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Добро пожаловать!</h1>
+            <p class="subtitle">Введите ваше имя для приветствия</p>
+        </header>
+
+        <main>
+            <div class="greeting-card">
+                <form method="POST" class="name-form" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="error-message">
+                                {% for error in form.name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Отправить</span>
+                        <svg class="arrow-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Контейнер для приветственного сообщения с анимацией -->
+                <div class="greeting-wrapper" id="greetingWrapper">
+                    {% if greeting_message %}
+                        <div class="greeting-message {% if 'Пожалуйста' in greeting_message %}error{% else %}success{% endif %}">
+                            <div class="greeting-content">
+                                {{ greeting_message }}
+                            </div>
+                            <button class="close-btn" onclick="hideGreeting()">×</button>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if recent_names %}
+                    <div class="recent-names">
+                        <h3>Наши посетители:</h3>
+                        <ul class="names-list">
+                            {% for user in recent_names %}
+                                <li class="name-item">
+                                    <span class="name">{{ user.name }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Приветственное приложение. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Добавляем небольшую анимацию для сообщений
+        document.addEventListener('DOMContentLoaded', function() {
+            const greetingWrapper = document.getElementById('greetingWrapper');
+
+            // Если есть сообщение, показываем его с анимацией
+            if (greetingWrapper && greetingWrapper.children.length > 0) {
+                showGreeting();
+
+                // Автоматически скрываем через 5 секунд
+                setTimeout(() => {
+                    hideGreeting();
+                }, 5000);
+            }
+        });
+
+        function showGreeting() {
+            const wrapper = document.getElementById('greetingWrapper');
+            const message = wrapper.querySelector('.greeting-message');
+
+            if (message) {
+                wrapper.style.display = 'block';
+                // Небольшая задержка для запуска анимации
+                setTimeout(() => {
+                    wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
+                    wrapper.style.opacity = '1';
+                    message.classList.add('show');
+                }, 10);
+            }
+        }
+
+        function hideGreeting() {
+            const wrapper = document.getElementById('greetingWrapper');
+            const message = wrapper.querySelector('.greeting-message');
+
+            if (message) {
+                message.classList.remove('show');
+                wrapper.style.maxHeight = '0';
+                wrapper.style.opacity = '0';
+
+                // Полностью скрываем после завершения анимации
+                setTimeout(() => {
+                    wrapper.style.display = 'none';
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>
